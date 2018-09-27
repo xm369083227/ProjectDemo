@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+         body{
+            margin: 0;
+        }
+        .menu{
+            display: block;
+            padding: 5px;
+
+        }
+    </style>
+</head>
+<body>
+     <div style="height: 48px;background-color: black;color: white">
+        Weicome to user_info system!
+    </div>
+
+        <div style="position: absolute;top:48px;bottom: 0;left: 0;width: 200px;background-color: brown;">
+            <a class="menu" href="/cmdb/user_info/">用户管理</a>
+            <a class="menu" href="/cmdb/user_group/">用户组管理</a>
+        </div>
+        <div style="position:absolute;top:48px;left: 210px;bottom: 0;right: 0;overflow: auto">
+            <h3>用户列表</h3>
+
+            <form action="/cmdb/user_info/" method="post">
+                <input type="text" name="user">
+                <input type="password" name="pwd">
+
+                <select name="group_id">
+                    {% for item in group_list %}
+                        <option value="{{ item.uid }}">{{ item.caption }}</option>
+                    {% endfor %}
+                </select>
+
+                <input type="submit" value="添加">
+            </form>
+            <ul>
+                {% for row in user_list %}
+                        <li>
+                            <a href="/cmdb/userdetail-{{ row.id }}">{{ row.username }}</a>| {{ row.user_group.caption }}
+                            <a href="/cmdb/userdel-{{ row.id }}">删除</a>|
+                            <a href="/cmdb/useredit-{{ row.id }}">编辑</a>|
+                        </li>
+                {% endfor%}
+            </ul>
+        </div>
+</body>
+</html>

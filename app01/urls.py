@@ -20,7 +20,15 @@ from django.conf.urls import include,url
 from app01 import views
 
 urlpatterns = [
-    path(r'admin/', admin.site.urls),
-    path('login/', views.login),
+    url(r'^admin/', admin.site.urls),
+    url(r'^login/', views.login),
+    url(r'^cpt/', views.cpt),
+    url(r'^index/', views.index),
+    url(r'^user_info/', views.user_info),
+    url(r'^userdetail-(?P<nid>\d+)/', views.user_detail),
+    url(r'^userdel-(?P<nid>\d+)/', views.user_del),
+    url(r'^useredit-(?P<nid>\d+)/', views.user_edit),
+    #path('user_group/', views.user_group),
+    #path('orm/', views.orm),
 ]
 

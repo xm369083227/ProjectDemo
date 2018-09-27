@@ -5,6 +5,17 @@
     <title>login</title>
 </head>
 <body>
-    <h2>app02login</h2>
+    <form action="/cmdb/login/" method="POST" enctype="multipart/form-data">
+        <p>
+            <input type="text" name="user" placeholder="用户名" />
+        </p>
+        <p>
+            <input type="password" name="pwd" placeholder="密码" />
+        </p>
+
+
+        <input type="submit" value="提交"/>
+        <span style="color: red">{{ error_msg }}</span>
+    </form>
 </body>
 </html>

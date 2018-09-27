@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+         body{
+            margin: 0;
+        }
+        .menu{
+            display: block;
+            padding: 5px;
+
+        }
+    </style>
+</head>
+<body>
+     <div style="height: 48px;background-color: black;color: white">
+        Weicome to user_info system!
+    </div>
+
+        <div style="position: absolute;top:48px;bottom: 0;left: 0;width: 200px;background-color: brown;">
+            <a class="menu" href="/cmdb/user_info/">用户管理</a>
+            <a class="menu" href="/cmdb/user_group/">用户组管理</a>
+        </div>
+        <div style="position:absolute;top:48px;left: 210px;bottom: 0;right: 0;overflow: auto">
+            <form action="/cmdb/useredit-{{ obj.id }}/" method="post">
+                <h2>编辑用户信息</h2>
+                <!--<input type="text"  style="display: none" name="id"  value="{{ obj.id }}">-->
+                <input type="text" name="user" value="{{ obj.username }}">
+                <input type="text" name="pwd" value="{{ obj.password }}">
+                <input type="submit"  value="修改">
+            </form>
+        </div>
+</body>
+</html>
