@@ -87,3 +87,68 @@ def cpt(request):
         cpt = request.POST.get("cpt")
         models.UserGroup.objects.update(caption=cpt)
         return render(request,"cpt.html")
+
+
+def host(request):
+    import json
+    if request.method == "GET":
+        v = models.Host.objects.all()
+        cpt_list = models.Business.objects.all()
+        return render(request,"host.html",{"v":v,"cpt_list":cpt_list})
+    elif request.method == "POST":
+        ret = {'status': True, 'error': None, 'data': None}
+        try:
+            h = request.POST.get("hostname")
+            ip = request.POST.get("ip")
+            port = request.POST.get("port")
+            b = request.POST.get("caption")#这里获取前台下拉框option传过来的value值
+            if h and len(h)>3:
+                models.Host.objects.create(
+                                hostname=h,
+                                ip=ip,
+                                port=port,
+                                b_id=b #把接收到的下拉框value传给b_id
+                                )
+            else:
+                ret['status'] = False
+                ret['error'] = "字符长度太短了"
+        except Exception as e:
+            ret['status'] = False
+            ret['error'] = '请求错误'
+        return HttpResponse(json.dumps(ret))#这就是返回给前台的data
+def edit(request):
+    v = models.Host.objects.all()
+    cpt_list = models.Business.objects.all()
+    if request.method == "GET":
+        return render(request,"host.html",{"v":v,"cpt_list":cpt_list})
+    elif request.method == "POST":
+        nid = request.POST.get("nid")
+        h = request.POST.get("hostname")
+        ip = request.POST.get("ip")
+        port = request.POST.get("port")
+        b = request.POST.get("caption")#这里获取前台下拉框option传过来的value值
+        models.Host.objects.filter(id=nid).update(
+                                hostname=h,
+                                ip=ip,
+                                port=port,
+                                b_id=b #把接收到的下拉框value传给b_id
+        )
+        return HttpResponse("OK")
+    else:
+        return render(request,"host.html",{"v":v,"cpt_list":cpt_list})
+
+
+def app(request):
+    if request.method == "GET":
+        app_list = models.Application.objects.all()
+        host_list = models.Host.objects.all()
+        return render(request,"app.html",{"app_list":app_list,"host_list":host_list})
+    elif request.method == "POST":
+        name = request.POST.get("app_name")
+        host_list = request.POST.getlist('h_list')
+        #在name=传过来的name时，对r进行add
+        obj = models.Application.objects.create(name=name)
+        obj.r.add(*host_list)#多对多添加对象的方法
+        return redirect('/cmdb/app')
+
+
