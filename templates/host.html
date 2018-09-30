@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主机列表</title>
+    <style>
+        .hide{
+            display: none;
+        }
+        .shade{
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0.6;
+            z-index: 0;
+        }
+        .modal,.edit-modal{
+            position: fixed;
+            top:200px;
+            left: 50%;
+            margin-left: -200px;
+            background-color: #efefef;
+            width: 500px;
+            height: 300px;
+            border: 1px solid #efefef;
+            z-index: 1;
+        }
+        .edit{
+            color: aquamarine;
+        }
+        .delete{
+            color: red;
+        }
+    </style>
+    <script src="/static/jquery-1.8.1.min.js"></script>
+</head>
+<body>
+        <h1>主机列表</h1>
+
+        <p>
+            <input  id="add_btn" type="submit" value="添加">
+        </p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>主机名</th>
+                    <th>ip</th>
+                    <th>端口</th>
+                    <th>部门</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in v %}
+                    <tr hid="{{ row.id }}" bid="{{ row.b_id }}">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ row.hostname }}</td>
+                        <td>{{ row.ip }}</td>
+                        <td>{{ row.port }}</td>
+                        <td>{{ row.b.caption }}</td>
+                        <td>
+                            <a class="edit" >编辑</a>|
+                            <a class="delete">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="shade hide"></div>
+        <div class="modal hide">
+            <form action="" method="post">
+                <p>
+                    <input type="text" name="hostname" id="hostname" placeholder="主机名">
+                </p>
+                <p>
+                    <input type="text" name="ip" id="ip" placeholder="ip">
+                </p>
+                <p>
+                    <input type="text" name="port" id="port" placeholder="port">
+                </p>
+                <p>
+                    <select name="caption" >
+                        {% for row in cpt_list %}
+                            <option value="{{ row.id }}">{{ row.caption }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+                <p>
+                   <input type="submit" id="tj_btn" value="提交">
+                     <!--<input type="submit" id="cancel_btn" value="取消">-->
+
+                </p>
+
+            </form>
+                    <button id="cancel_btn" >取消</button>
+        </div>
+        <div class="edit-modal hide">
+            <form id="edit_form" >
+                <input type="text" name="nid" style="display:none" />
+                <input type="text" placeholder="主机名" name="hostname" />
+                <input type="text" placeholder="IP" name="ip" />
+                <input  type="text" placeholder="端口" name="port" />
+                <select name="caption">
+                    {% for op in cpt_list %}
+                    <option value="{{ op.id }}">{{ op.caption }}</option>
+                    {% endfor %}
+                </select>
+                <p>
+                    <input type="submit" class="edit_btn" value="确认编辑">
+                    <a id="cancel_btn1" >取消</a>
+                </p>
+            </form>
+
+        </div>
+        <script>
+            $(function(){
+                $("#add_btn").click(function(){
+                    $(".shade,.modal").removeClass("hide");
+                })
+                $("#cancel_btn,#cancel_btn1").click(function(){
+                    $(".shade,.modal,.edit-modal").addClass("hide")
+                })
+                $("#tj_btn").click(function(){
+                    $.ajax({
+                        url:"/cmdb/host/",
+                        type:"POST",
+                        data:{  "hostname":$("#hostname").val(),
+                                "ip":$("#ip").val(),
+                                "port":$("#port").val(),
+                        },
+                        success:function(data){
+                            var obj = JSON.parse(data);
+                            if(obj.status){
+                                location.reload();
+                            }else{
+                                $('#erro_msg').text(obj.error);
+                            }
+
+                        }
+                    })
+                })
+                 $('.edit').click(function(){
+                    $('.shade,.edit-modal').removeClass('hide');
+                    var bid = $(this).parent().parent().attr('bid');
+                    var nid = $(this).parent().parent().attr('hid');
+                    $('#edit_form').find('select').val(bid);
+                    $('#edit_form').find('input[name="nid"]').val(nid);
+
+                    // 修改
+
+                    $.ajax({
+                        url:"/cmdb/edit/",
+                        type:"POST",
+                        data: $('#edit_form').serialize(),
+                        success:function(){
+                            location.href("cmdb/host/")
+                        }
+                    });
+
+                    // models.Host.objects.filter(nid=nid).update()
+                })
+
+            })
+        </script>
+</body>
+</html>
