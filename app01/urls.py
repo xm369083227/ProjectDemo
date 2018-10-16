@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^host/', views.host),
     url(r'^edit/', views.edit),
     url(r'^app/', views.app),
+    url(r'^pagetest/', views.pagetest),
     url(r'^user_info/', views.user_info),
     url(r'^userdetail-(?P<nid>\d+)/', views.user_detail),
     url(r'^userdel-(?P<nid>\d+)/', views.user_del),

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .table1{
+            border:1px solid #ccc;
+        }
+    </style>
+    #后台pagination.html模板使用了bootstrap美化分页样式，所以这里需要导入bootstrap
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <div>
+    <table class="table1">
+        <thead>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>年龄</th>
+        </thead>
+        <tbody>
+            {% load pagination_tags %}
+            {% autopaginate pageObj 10 %}
+            {% for row in pageObj %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.age }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% paginate %}
+    </div>
+</body>
+</html>

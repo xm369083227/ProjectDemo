@@ -30,3 +30,7 @@ class Application(models.Model):
 # class APP(models.Model):
 #     host = models.ForeignKey("Host",to_field="id",on_delete=models.CASCADE)#host_id
 #     app = models.ForeignKey("Application",to_field="id",on_delete=models.CASCADE)#caption_id
+
+class pagetest(models.Model):
+    name = models.CharField(max_length=32)
+    age = models.IntegerField(max_length=32)

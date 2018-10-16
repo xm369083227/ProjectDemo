@@ -151,4 +151,6 @@ def app(request):
         obj.r.add(*host_list)#多对多添加对象的方法
         return redirect('/cmdb/app')
 
-
+def pagetest(request):
+    pageObj = models.pagetest.objects.all()
+    return render(request,"pagetest.html",{"pageObj":pageObj})
